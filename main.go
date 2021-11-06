@@ -6,7 +6,14 @@ import (
 	"github.com/phpdave11/gofpdf"
 	"io"
 	"os"
+	"strconv"
 	"strings"
+)
+
+var (
+	defaultfont = "Helvetica"
+	defaultface = ""
+	defaultsize = 10.0
 )
 
 func min(a, b int) int {
@@ -49,12 +56,64 @@ func main() {
 
 		lines := strings.Fields(string(line))
 
+		if lines[0] == "#" {
+			if lines[1] == "font" {
+				defaultfont = lines[2]
+				fmt.Println("Font set to", defaultfont)
+			}
+			if lines[1] == "face" {
+				defaultface = lines[2]
+				fmt.Println("Face set to", defaultface)
+			}
+			if lines[1] == "size" {
+				s, err := strconv.Atoi(lines[2])
+				if err == nil {
+					defaultsize := float64(s)
+					fmt.Println("Size set to", defaultsize)
+				}
+			}
+			continue
+		}
+
 		// NACH ANGABE HERSTELLER
 		// pdf.SetXY(12.7+x*20.32, 8.47+y*38.10)
 
 		// etwas getuned
 		pdf.SetXY(11.0+x*20.32, 9.0+y*38.30)
+
 		for i := 0; i < min(len(lines), 3); i++ {
+			font := defaultfont
+			face := defaultface
+			size := defaultsize
+			if strings.Contains(lines[i], `\b`) {
+				face = "b"
+				lines[i] = strings.Replace(lines[i], `\b`, "", 1)
+			}
+			if strings.Contains(lines[i], `\l`) {
+				size = defaultsize + 1
+				lines[i] = strings.Replace(lines[i], `\l`, "", 1)
+			}
+			if strings.Contains(lines[i], `\L`) {
+				size = defaultsize + 1
+				lines[i] = strings.Replace(lines[i], `\L`, "", 1)
+			}
+			if strings.Contains(lines[i], `\s`) {
+				size = defaultsize - 1
+				lines[i] = strings.Replace(lines[i], `\s`, "", 1)
+			}
+			if strings.Contains(lines[i], `\S`) {
+				size = defaultsize - 2
+				lines[i] = strings.Replace(lines[i], `\S`, "", 1)
+			}
+			if strings.Contains(lines[i], `\T`) {
+				font = "Times"
+				lines[i] = strings.Replace(lines[i], `\T`, "", 1)
+			}
+			if strings.Contains(lines[i], `\H`) {
+				font = "Helvetica"
+				lines[i] = strings.Replace(lines[i], `\H`, "", 1)
+			}
+			pdf.SetFont(font, face, size)
 			pdf.CellFormat(20.32, 12.3/3.0, lines[i], "0", 2, "L", false, 0, "")
 		}
 
