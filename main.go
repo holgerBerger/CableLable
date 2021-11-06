@@ -62,8 +62,13 @@ func main() {
 				fmt.Println("Font set to", defaultfont)
 			}
 			if lines[1] == "face" {
-				defaultface = lines[2]
-				fmt.Println("Face set to", defaultface)
+				if len(lines) == 2 {
+					defaultface = ""
+					fmt.Println("Face set to standard")
+				} else {
+					defaultface = lines[2]
+					fmt.Println("Face set to", defaultface)
+				}
 			}
 			if lines[1] == "size" {
 				s, err := strconv.Atoi(lines[2])
