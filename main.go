@@ -48,6 +48,8 @@ func main() {
 
 	x := 0.0
 	y := 0.0
+	pages := 1
+	newpage := false
 	for {
 		line, err := buf.ReadBytes('\n')
 		if err == io.EOF {
@@ -78,6 +80,13 @@ func main() {
 				}
 			}
 			continue
+		}
+
+		if newpage {
+			pdf.AddPage()
+			fmt.Println("New page")
+			pages += 1
+			newpage = false
 		}
 
 		// NACH ANGABE HERSTELLER
@@ -129,10 +138,11 @@ func main() {
 		}
 		if y == 7 {
 			y = 0
-			pdf.AddPage()
+			newpage = true
 		}
 	}
 
+	fmt.Println(pages, "pages")
 	err = pdf.OutputFileAndClose(os.Args[1] + ".pdf")
 	if err != nil {
 		panic(err)
