@@ -24,6 +24,7 @@ func min(a, b int) int {
 }
 
 func main() {
+
 	if len(os.Args) < 2 {
 		fmt.Println("usage: CableLable <filename>")
 		fmt.Println(" file contains up to 3 words per line,")
@@ -75,7 +76,7 @@ func main() {
 			if lines[1] == "size" {
 				s, err := strconv.Atoi(lines[2])
 				if err == nil {
-					defaultsize := float64(s)
+					defaultsize = float64(s)
 					fmt.Println("Size set to", defaultsize)
 				}
 			}
@@ -128,6 +129,7 @@ func main() {
 				lines[i] = strings.Replace(lines[i], `\H`, "", 1)
 			}
 			pdf.SetFont(font, face, size)
+			fmt.Println(font, face, size)
 			pdf.CellFormat(20.32, 12.3/3.0, lines[i], "0", 2, "L", false, 0, "")
 		}
 
