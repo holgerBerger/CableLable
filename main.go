@@ -133,7 +133,8 @@ func main() {
 				lines[i] = strings.Replace(lines[i], `\H`, "", 1)
 			}
 			pdf.SetFont(font, face, size)
-			pdf.CellFormat(20.32, 12.3/3.0, lines[i], "0", 2, "L", false, 0, "")
+			// pdf.CellFormat(20.32, 12.3/3.0, lines[i], "0", 2, "L", false, 0, "")   // fixed line distance
+			pdf.CellFormat(20.32, size*0.38, lines[i], "0", 2, "L", false, 0, "") // font size relative distance
 		}
 
 		x = x + 1
