@@ -59,6 +59,10 @@ func main() {
 
 		lines := strings.Fields(string(line))
 
+		if len(lines) == 0 {
+			continue
+		}
+
 		if lines[0] == "#" {
 			if lines[1] == "font" {
 				defaultfont = lines[2]
@@ -129,7 +133,6 @@ func main() {
 				lines[i] = strings.Replace(lines[i], `\H`, "", 1)
 			}
 			pdf.SetFont(font, face, size)
-			fmt.Println(font, face, size)
 			pdf.CellFormat(20.32, 12.3/3.0, lines[i], "0", 2, "L", false, 0, "")
 		}
 
