@@ -98,7 +98,8 @@ func main() {
 		// pdf.SetXY(12.7+x*20.32, 8.47+y*38.10)
 
 		// etwas getuned
-		pdf.SetXY(11.0+x*20.32, 9.0+y*38.30)
+		// pdf.SetXY(11.0+x*20.32, 9.0+y*38.30)
+		pdf.SetXY(12.0+x*20.32, 9.0+y*38.30)
 
 		for i := 0; i < min(len(lines), 3); i++ {
 			font := defaultfont
