@@ -16,4 +16,4 @@
 # font Courier
 1.Line 2.Line 3.Line
 \b\l1.Line \s2.Line \S3.Line
-\b\L2.Line \S2.Line \S3.Line
+\b\L1.Line \S2.Line \S3.Line

@@ -23,7 +23,7 @@ At any point in the file can be lines of the form
 ```
 which change the default of font, face and size.
 Font can be one of "Times", "Ariel", "Helvetica", "Courier",
-Face can be "b" for bold or "i" for italic, "u" for underlined, or 3rd filed empty for standard,
+Face can be "b" for bold or "i" for italic, "u" for underlined, or 3rd field empty for standard,
 size can be a size in pt, like 10,11,12.
 
 Each word can contain `\b` for bold, `\T` for Times, `\H` for Helvetica,

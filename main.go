@@ -24,15 +24,29 @@ func min(a, b int) int {
 }
 
 func main() {
+	var (
+		large = false
+		filename = ""
+	)
 
 	if len(os.Args) < 2 {
-		fmt.Println("usage: CableLable <filename>")
+		fmt.Println("usage: CableLable [--large] <filename>")
 		fmt.Println(" file contains up to 3 words per line,")
 		fmt.Println(" each word one line of label, each line a label.")
 		os.Exit(0)
 	}
 
-	f, err := os.Open(os.Args[1])
+
+	if os.Args[1] == "--large" {
+		large=true	
+		filename=os.Args[2]	
+		fmt.Println("HellermanTyton TAG02LA4")
+	} else {
+		filename=os.Args[1]	
+		fmt.Println("HellermanTyton TAG132LA4")
+	}
+
+	f, err := os.Open(filename)
 	if err != nil {
 		panic(err)
 	}
@@ -43,7 +57,7 @@ func main() {
 	pdf.SetFont("Arial", "B", 12)
 
 	pdf.SetXY(1, 3)
-	pdf.CellFormat(210, 12.3/3.0, os.Args[1], "0", 2, "C", false, 0, "")
+	pdf.CellFormat(210, 12.3/3.0, filename , "0", 2, "C", false, 0, "")
 
 	pdf.SetFont("Arial", "", 10)
 
@@ -99,7 +113,11 @@ func main() {
 
 		// etwas getuned
 		// pdf.SetXY(11.0+x*20.32, 9.0+y*38.30)
-		pdf.SetXY(12.0+x*20.32, 9.0+y*38.30)
+		if large {
+			pdf.SetXY(12.0+x*25.4, 9.0+y*38.30)
+		} else {
+			pdf.SetXY(12.0+x*20.32, 9.0+y*38.30)
+		}
 
 		for i := 0; i < min(len(lines), 3); i++ {
 			font := defaultfont
@@ -136,12 +154,26 @@ func main() {
 			pdf.SetFont(font, face, size)
 			// pdf.CellFormat(20.32, 12.3/3.0, lines[i], "0", 2, "L", false, 0, "")   // fixed line distance
 			pdf.CellFormat(20.32, size*0.38, lines[i], "0", 2, "L", false, 0, "") // font size relative distance
+			if large {
+				pdf.TransformBegin()
+				// leichte korrektur des rotationspunkts nach links -2mm
+				pdf.TransformRotate(180, -2+(25.4/2.0)+12.0+x*25.4, (36.5/2.0)+9.0+y*38.30)
+				pdf.CellFormat(20.32, size*0.38, lines[i], "0", 2, "L", false, 0, "") // font size relative distance
+				pdf.TransformEnd()
+			}
 		}
 
 		x = x + 1
-		if x == 9 {
-			x = 0
-			y = y + 1
+		if large {
+			if x == 7 {
+				x = 0
+				y = y + 1
+			}
+		} else {
+			if x == 9 {
+				x = 0
+				y = y + 1
+			}
 		}
 		if y == 7 {
 			y = 0
@@ -150,7 +182,7 @@ func main() {
 	}
 
 	fmt.Println(pages, "pages")
-	err = pdf.OutputFileAndClose(os.Args[1] + ".pdf")
+	err = pdf.OutputFileAndClose(filename + ".pdf")
 	if err != nil {
 		panic(err)
 	}
